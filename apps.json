@@ -1,0 +1,52 @@
+{
+  "suite_name": "Nyebralti Office",
+  "version": "1.0.0",
+  "repository": "https://github.com/nyebralti/nyebralti-office",
+  "default_install_dir": "C:\\Program Files\\Nyebralti Office",
+  "apps": [
+    {
+      "id": "launcher",
+      "name": "Nyebralti Hub (Başlatıcı)",
+      "folder": "launcher",
+      "executable": "NyebraltiLauncher.exe",
+      "entry_point": "apps/launcher/main.py",
+      "description": "Nyebralti Office merkezi yönetim, son dosyalar ve uygulama başlatıcı paneli.",
+      "mandatory": true,
+      "icon": "launcher.ico",
+      "download_url": "https://github.com/nyebralti/nyebralti-office/releases/download/v1.0.0/launcher.zip"
+    },
+    {
+      "id": "word",
+      "name": "Nyebralti Word",
+      "folder": "word",
+      "executable": "NyebraltiWord.exe",
+      "entry_point": "apps/word/main.py",
+      "description": "Zengin metin düzenleme, belge biçimlendirme, tablo/resim ekleme ve PDF dışa aktarma.",
+      "mandatory": false,
+      "icon": "word.ico",
+      "download_url": "https://github.com/nyebralti/nyebralti-office/releases/download/v1.0.0/word.zip"
+    },
+    {
+      "id": "excel",
+      "name": "Nyebralti Excel",
+      "folder": "excel",
+      "executable": "NyebraltiExcel.exe",
+      "entry_point": "apps/excel/main.py",
+      "description": "Elektronik tablo, matematiksel ve istatistiksel formüller, veri analizi ve CSV/XLSX desteği.",
+      "mandatory": false,
+      "icon": "excel.ico",
+      "download_url": "https://github.com/nyebralti/nyebralti-office/releases/download/v1.0.0/excel.zip"
+    },
+    {
+      "id": "paint",
+      "name": "Nyebralti Paint",
+      "folder": "paint",
+      "executable": "NyebraltiPaint.exe",
+      "entry_point": "apps/paint/main.py",
+      "description": "Serbest çizim tuvali, fırça/şekil araçları, renk paleti ve görsel düzenleme.",
+      "mandatory": false,
+      "icon": "paint.ico",
+      "download_url": "https://github.com/nyebralti/nyebralti-office/releases/download/v1.0.0/paint.zip"
+    }
+  ]
+}
