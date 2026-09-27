@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyebralti Office - Modern, Hızlı ve Modüler Ofis Paketi</title>
+    <meta name="description" content="PyQt6 ile geliştirilmiş modern, modüler ve çok kullanıcılı masaüstü ofis paketi. Word, Excel, Paint ve Hub tek çatı altında.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f1117;
+            --bg-card: rgba(26, 29, 38, 0.7);
+            --bg-card-hover: rgba(35, 40, 53, 0.9);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(59, 130, 246, 0.4);
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.35);
+            --secondary: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* HEADER / NAVBAR */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(16px);
+            background: rgba(15, 17, 23, 0.75);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 0 16px var(--primary-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            transition: color 0.2s;
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #2563eb);
+            color: #ffffff;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--primary-glow);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-color);
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            padding: 90px 0 60px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--border-accent);
+            color: #60a5fa;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #ffffff 30%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 680px;
+            margin: 0 auto 36px;
+            font-size: 18px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .hero-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: 12px;
+        }
+
+        /* APPS SHOWCASE / TABS */
+        .showcase {
+            padding: 50px 0 80px;
+        }
+
+        .showcase-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .tab-btn.active {
+            color: white;
+            background: rgba(59, 130, 246, 0.15);
+            border-color: var(--border-accent);
+        }
+
+        .tab-content {
+            display: none;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 36px;
+            align-items: center;
+        }
+
+        .tab-content.active {
+            display: grid;
+        }
+
+        .tab-info h3 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .tab-info p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .feature-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .feature-bullets li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .feature-bullets li span.icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .preview-box {
+            background: #151822;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .mock-editor {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: #94a3b8;
+            background: #0f1117;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* GRID FEATURES */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            padding: 40px 0 80px;
+        }
+
+        .f-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .f-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-accent);
+            transform: translateY(-4px);
+        }
+
+        .f-icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        .f-card h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .f-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* DOWNLOAD CTA */
+        .download-box {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(139, 92, 246, 0.15));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 56px 32px;
+            text-align: center;
+            margin: 40px 0 90px;
+            position: relative;
+        }
+
+        .download-box h2 {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            color: white;
+        }
+
+        .download-box p {
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto 28px;
+            font-size: 16px;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 36px 0;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        @media (max-width: 850px) {
+            .hero h1 { font-size: 38px; }
+            .tab-content { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <div class="logo-icon">✨</div>
+                    <span>Nyebralti Office</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#apps">Uygulamalar</a>
+                    <a href="#features">Özellikler</a>
+                    <a href="#architecture">Çoklu Kullanıcı</a>
+                    <a href="#download">İndir</a>
+                </div>
+                <div class="nav-cta">
+                    <a href="https://github.com/nyebralti/nyebralti-office" target="_blank" class="btn btn-secondary">
+                        ⭐ GitHub
+                    </a>
+                    <a href="NyebraltiSetup.exe" class="btn btn-primary" download>
+                        📥 Setup İndir
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <div class="badge">
+                <span>🚀 v1.0.0 Kararlı Sürüm Yayınlandı</span>
+            </div>
+            <h1>Tüm Ofis İhtiyaçlarınız İçin<br><span>Hızlı, Modüler & Özgür.</span></h1>
+            <p>
+                Python & PyQt6 ile geliştirilmiş modern masaüstü ofis paketi. 
+                Word, Excel, Paint ve merkezi Hub başlatıcı ile tam donanımlı, otomatik kayıt güvencesiyle.
+            </p>
+            <div class="hero-buttons">
+                <a href="NyebraltiSetup.exe" class="btn btn-primary btn-large" download>
+                    📥 NyebraltiSetup.exe İndir (v1.0.0)
+                </a>
+                <a href="https://github.com/nyebralti/nyebralti-office" target="_blank" class="btn btn-secondary btn-large">
+                    Depoyu Görüntüle & Fork Et
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TABS / SHOWCASE -->
+    <section class="showcase" id="apps">
+        <div class="container">
+            <div class="showcase-card">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" onclick="switchTab('word')">📝 Nyebralti Word</button>
+                    <button class="tab-btn" onclick="switchTab('excel')">📊 Nyebralti Excel</button>
+                    <button class="tab-btn" onclick="switchTab('paint')">🎨 Nyebralti Paint</button>
+                    <button class="tab-btn" onclick="switchTab('hub')">⚡ Nyebralti Hub</button>
+                </div>
+
+                <!-- TAB: WORD -->
+                <div id="tab-word" class="tab-content active">
+                    <div class="tab-info">
+                        <h3>Nyebralti Word</h3>
+                        <p>Zengin metin düzenleme, belge biçimlendirme ve doğrudan yüksek çözünürlüklü PDF dışa aktarma yeteneği.</p>
+                        <ul class="feature-bullets">
+                            <li><span class="icon">✓</span> Yazı tipi, boyutu, kalın, italik, altı çizili ve renk paleti</li>
+                            <li><span class="icon">✓</span> Satır aralığı, iki yana hizalama, madde işaretli & numaralı listeler</li>
+                            <li><span class="icon">✓</span> Özelleştirilebilir tablo ve resim ekleme desteği</li>
+                            <li><span class="icon">✓</span> Tek tıkla PDF veya yerel .nyw formatında dışa aktarma</li>
+                        </ul>
+                        <a href="downloads/word.zip" class="btn btn-secondary" download>word.zip İndir</a>
+                    </div>
+                    <div class="preview-box">
+                        <div class="preview-header">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                            <span style="font-size: 11px; color: #64748b; margin-left: 8px;">Nyebralti Word - Belge1.nyw</span>
+                        </div>
+                        <div class="mock-editor">
+                            <div style="color: #60a5fa; font-weight: bold; font-size: 15px; margin-bottom: 8px;"># Proje İlerleme Raporu</div>
+                            <div style="color: #cbd5e1; margin-bottom: 6px;">Bu belge Nyebralti Word ile otomatik biçimlendirilmiştir.</div>
+                            <div style="background: rgba(59,130,246,0.15); padding: 6px 10px; border-left: 3px solid #3b82f6; border-radius: 4px;">
+                                [Durum: Tamamlandı | PDF Dışa Aktarım: Hazır]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: EXCEL -->
+                <div id="tab-excel" class="tab-content">
+                    <div class="tab-info">
+                        <h3>Nyebralti Excel</h3>
+                        <p>Dinamik matematiksel ve istatistiksel formül motoruna sahip güçlü elektronik tablo editörü.</p>
+                        <ul class="feature-bullets">
+                            <li><span class="icon">✓</span> Formüller: <code>=SUM()</code>, <code>=AVERAGE()</code>, <code>=MIN()</code>, <code>=MAX()</code>, <code>=COUNT()</code></li>
+                            <li><span class="icon">✓</span> Dört işlem ve parantezli cebirsel hesaplama motoru</li>
+                            <li><span class="icon">✓</span> Hücre arka plan dolgusu, yazı rengi ve hizalama ayarları</li>
+                            <li><span class="icon">✓</span> CSV ve .nyx formatlarında tam veri uyumluluğu</li>
+                        </ul>
+                        <a href="downloads/excel.zip" class="btn btn-secondary" download>excel.zip İndir</a>
+                    </div>
+                    <div class="preview-box">
+                        <div class="preview-header">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                            <span style="font-size: 11px; color: #64748b; margin-left: 8px;">Nyebralti Excel - Tablo.nyx</span>
+                        </div>
+                        <div class="mock-editor">
+                            <div style="display: grid; grid-template-columns: 50px 100px 100px 100px; gap: 4px; text-align: center;">
+                                <div style="background: #1e293b; color: #94a3b8;">#</div>
+                                <div style="background: #1e293b; color: #94a3b8;">A</div>
+                                <div style="background: #1e293b; color: #94a3b8;">B</div>
+                                <div style="background: #1e293b; color: #94a3b8;">C</div>
+                                <div style="background: #1e293b; color: #94a3b8;">1</div>
+                                <div style="background: #282834;">1500</div>
+                                <div style="background: #282834;">2300</div>
+                                <div style="background: #2563eb; color: white;">=SUM(A1:B1)</div>
+                            </div>
+                            <div style="margin-top: 12px; color: #34d399; font-size: 12px;">✓ Hesaplanan Sonuç (C1): 3800</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: PAINT -->
+                <div id="tab-paint" class="tab-content">
+                    <div class="tab-info">
+                        <h3>Nyebralti Paint</h3>
+                        <p>Piksel ve serbest çizim tuvali, fırça/silgi araçları, şekiller ve renk doldurma özellikleri.</p>
+                        <ul class="feature-bullets">
+                            <li><span class="icon">✓</span> Kalem, yumuşak fırça, silgi, düz çizgi, dikdörtgen ve elips</li>
+                            <li><span class="icon">✓</span> Hızlı kova (BFS Flood Fill) ile alan renklendirme</li>
+                            <li><span class="icon">✓</span> 20 adımlık Geri Al (Undo) ve Yinele (Redo) yığını</li>
+                            <li><span class="icon">✓</span> PNG, JPG ve BMP formatlarında kaydetme</li>
+                        </ul>
+                        <a href="downloads/paint.zip" class="btn btn-secondary" download>paint.zip İndir</a>
+                    </div>
+                    <div class="preview-box" style="text-align: center;">
+                        <div style="font-size: 40px; margin-bottom: 8px;">🎨 ✏️ 📐 🪣</div>
+                        <div style="color: #cbd5e1; font-weight: 600;">Serbest Çizim ve İllüstrasyon Tuvali</div>
+                        <div style="color: #64748b; font-size: 12px; margin-top: 6px;">1280x720 Yüksek Kalite Çıktı Desteği</div>
+                    </div>
+                </div>
+
+                <!-- TAB: HUB -->
+                <div id="tab-hub" class="tab-content">
+                    <div class="tab-info">
+                        <h3>Nyebralti Hub (Merkezi Başlatıcı)</h3>
+                        <p>Tüm ofis uygulamalarınızı tek noktadan yönetin, son dosyalarınıza ve önceki kayıtlarınıza anında ulaşın.</p>
+                        <ul class="feature-bullets">
+                            <li><span class="icon">✓</span> Tek tıkla Word, Excel veya Paint uygulamasını başlatma</li>
+                            <li><span class="icon">✓</span> Kullanıcı profiline özel son çalışılan dosyalar listesi</li>
+                            <li><span class="icon">✓</span> Otomatik kayıt snapshot'larına doğrudan erişim ve geri yükleme</li>
+                            <li><span class="icon">✓</span> Şeffaf kullanıcı işlem ve hareket günlüğü (Audit Log)</li>
+                        </ul>
+                        <a href="downloads/launcher.zip" class="btn btn-secondary" download>launcher.zip İndir</a>
+                    </div>
+                    <div class="preview-box">
+                        <div class="mock-editor">
+                            <div style="color: #f8fafc; font-weight: bold; margin-bottom: 8px;">⚡ Son Dosyalar (office.db):</div>
+                            <div style="color: #94a3b8; font-size: 12px;">📝 Rapor_2026.nyw (10:24)</div>
+                            <div style="color: #94a3b8; font-size: 12px;">📊 Bütçe_Q3.nyx (09:40)</div>
+                            <div style="color: #94a3b8; font-size: 12px;">🎨 Taslak_Logo.png (Dün)</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ARCHITECTURE & FEATURES -->
+    <section class="container" id="features">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h2 style="font-size: 32px; font-weight: 800; color: white;">Güçlü Sistem Mimarisi</h2>
+            <p style="color: var(--text-muted); font-size: 16px;">Veri güvenliği, hız ve kullanıcı gizliliği için tasarlandı.</p>
+        </div>
+        <div class="features-grid">
+            <div class="f-card">
+                <div class="f-icon">⏱️</div>
+                <h4>Otomatik Kayıt Motoru</h4>
+                <p>Belgeleriniz aralıklarla arka planda otomatik olarak kaydedilir. Ani kapanma veya elektrik kesintisinde hiçbir emeğiniz kaybolmaz.</p>
+            </div>
+            <div class="f-card">
+                <div class="f-icon">⏳</div>
+                <h4>Sürüm Geçmişi ve Geri Yükleme</h4>
+                <p>Her uygulamanın içinde yer alan "Önceki Kayıtlar" menüsüyle geçmiş snapshot'ları önizleyebilir, dilediğiniz revizyona anında dönebilirsiniz.</p>
+            </div>
+            <div class="f-card">
+                <div class="f-icon">🛡️</div>
+                <h4>Kullanıcı Başına İzole DB</h4>
+                <p>Veritabanı <code>%APPDATA%\Nyebralti Office\office.db</code> yolundadır. Aynı bilgisayardaki her Windows kullanıcısı yalnızca kendi geçmişini görür.</p>
+            </div>
+            <div class="f-card">
+                <div class="f-icon">📦</div>
+                <h4>apps.json ile Modüler Kurulum</h4>
+                <p>Kurulum programı <code>apps.json</code> dosyasını okuyarak yalnızca istediğiniz uygulamaları seçip kurmanızı sağlar.</p>
+            </div>
+            <div class="f-card">
+                <div class="f-icon">🚀</div>
+                <h4>Tek Dosya Standalone EXE</h4>
+                <p>PyInstaller ile derlenmiş bağımsız .exe dosyaları harici Python kurulumu gerektirmeden Windows üzerinde doğrudan çalışır.</p>
+            </div>
+            <div class="f-card">
+                <div class="f-icon">💻</div>
+                <h4>Tamamen Yerel & Gizlilik Odaklı</h4>
+                <p>Belgeleriniz ve tablolarınız üçüncü şahıs bulut sunucularına gönderilmez, tamamen sizin bilgisayarınızda yerel kalır.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOWNLOAD SECTION -->
+    <section class="container" id="download">
+        <div class="download-box">
+            <h2>Nyebralti Office'i Hemen İndirin</h2>
+            <p>Kurulum sihirbazını indirerek saniyeler içinde bilgisayarınıza kurun ve ofis üretkenliğinizi artırın.</p>
+            <div class="hero-buttons">
+                <a href="NyebraltiSetup.exe" class="btn btn-primary btn-large" download>
+                    📥 NyebraltiSetup.exe İndir (v1.0.0)
+                </a>
+                <a href="https://github.com/nyebralti/nyebralti-office" target="_blank" class="btn btn-secondary btn-large">
+                    Kaynak Kodları GitHub'da Gör
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div>
+                    <strong>Nyebralti Office Suite</strong> • Açık Kaynak Masaüstü Ofis Çözümü
+                </div>
+                <div>
+                    <a href="https://github.com/nyebralti/nyebralti-office" target="_blank" style="color: #60a5fa;">GitHub Deposu</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE TAB JS -->
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabName));
+            const targetContent = document.getElementById('tab-' + tabName);
+
+            if (targetBtn) targetBtn.classList.add('active');
+            if (targetContent) targetContent.classList.add('active');
+        }
+    </script>
+</body>
+</html>

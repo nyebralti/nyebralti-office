@@ -12,8 +12,7 @@
       "entry_point": "apps/launcher/main.py",
       "description": "Nyebralti Office merkezi yönetim, son dosyalar ve uygulama başlatıcı paneli.",
       "mandatory": true,
-      "icon": "launcher.ico",
-      "download_url": "https://github.com/nyebralti/nyebralti-office/releases/download/v1.0.0/launcher.zip"
+      "download_url": "https://raw.githubusercontent.com/nyebralti/nyebralti-office/main/downloads/launcher.zip"
     },
     {
       "id": "word",
@@ -23,8 +22,7 @@
       "entry_point": "apps/word/main.py",
       "description": "Zengin metin düzenleme, belge biçimlendirme, tablo/resim ekleme ve PDF dışa aktarma.",
       "mandatory": false,
-      "icon": "word.ico",
-      "download_url": "https://github.com/nyebralti/nyebralti-office/releases/download/v1.0.0/word.zip"
+      "download_url": "https://raw.githubusercontent.com/nyebralti/nyebralti-office/main/downloads/word.zip"
     },
     {
       "id": "excel",
@@ -32,10 +30,9 @@
       "folder": "excel",
       "executable": "NyebraltiExcel.exe",
       "entry_point": "apps/excel/main.py",
-      "description": "Elektronik tablo, matematiksel ve istatistiksel formüller, veri analizi ve CSV/XLSX desteği.",
+      "description": "Elektronik tablo, matematiksel ve istatistiksel formüller, veri analizi ve CSV desteği.",
       "mandatory": false,
-      "icon": "excel.ico",
-      "download_url": "https://github.com/nyebralti/nyebralti-office/releases/download/v1.0.0/excel.zip"
+      "download_url": "https://raw.githubusercontent.com/nyebralti/nyebralti-office/main/downloads/excel.zip"
     },
     {
       "id": "paint",
@@ -45,8 +42,7 @@
       "entry_point": "apps/paint/main.py",
       "description": "Serbest çizim tuvali, fırça/şekil araçları, renk paleti ve görsel düzenleme.",
       "mandatory": false,
-      "icon": "paint.ico",
-      "download_url": "https://github.com/nyebralti/nyebralti-office/releases/download/v1.0.0/paint.zip"
+      "download_url": "https://raw.githubusercontent.com/nyebralti/nyebralti-office/main/downloads/paint.zip"
     }
   ]
 }
