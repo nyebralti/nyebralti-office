@@ -59,6 +59,7 @@ class InstallWorker(QThread):
             for app_meta in self.selected_apps:
                 app_folder = app_meta["folder"]
                 app_name = app_meta["name"]
+                exe_name = app_meta.get("executable")
                 self.progress_changed.emit(int(current_pct), f"Yükleniyor: {app_name}...")
 
                 app_src = proj_root / "apps" / app_folder
@@ -67,6 +68,13 @@ class InstallWorker(QThread):
                     if app_dest.exists():
                         shutil.rmtree(app_dest)
                     shutil.copytree(app_src, app_dest)
+
+                # Eğer derlenmiş exe varsa hedef dizine yerleştir
+                if exe_name:
+                    dist_exe = proj_root / "dist" / exe_name
+                    if dist_exe.exists():
+                        shutil.copy2(dist_exe, self.target_dir / exe_name)
+                        shutil.copy2(dist_exe, app_dest / exe_name)
 
                 current_pct += step_inc
 
@@ -77,21 +85,23 @@ class InstallWorker(QThread):
 
             # 4. Masaüstü ve Başlat Menüsü Kısayolları Oluştur
             self.progress_changed.emit(92, "Masaüstü ve Başlat menüsü kısayolları oluşturuluyor...")
-            launcher_entry = self.target_dir / "apps" / "launcher" / "main.py"
-            python_exe = sys.executable
+            launcher_exe = self.target_dir / "NyebraltiLauncher.exe"
+            if not launcher_exe.exists():
+                launcher_exe = self.target_dir / "apps" / "launcher" / "NyebraltiLauncher.exe"
+
+            target_exec = str(launcher_exe) if launcher_exe.exists() else sys.executable
 
             desktop_lnk = get_desktop_dir() / "Nyebralti Office.lnk"
             start_menu_lnk = get_start_menu_dir() / "Nyebralti Office.lnk"
 
-            # Launcher kısayolu oluştur (pythonw veya python ile başlatıcı)
             create_windows_shortcut(
-                target_path=python_exe,
+                target_path=target_exec,
                 shortcut_path=str(desktop_lnk),
                 description="Nyebralti Office Suite",
                 working_dir=str(self.target_dir),
             )
             create_windows_shortcut(
-                target_path=python_exe,
+                target_path=target_exec,
                 shortcut_path=str(start_menu_lnk),
                 description="Nyebralti Office Suite",
                 working_dir=str(self.target_dir),
@@ -325,7 +335,15 @@ class FinishPage(QWizardPage):
 
     def validatePage(self):
         if self.launch_checkbox.isChecked():
-            launcher_script = Path(self.wizard().target_install_dir) / "apps" / "launcher" / "main.py"
-            if launcher_script.exists():
-                subprocess.Popen([sys.executable, str(launcher_script)])
+            target_dir = Path(self.wizard().target_install_dir)
+            launcher_exe = target_dir / "NyebraltiLauncher.exe"
+            if not launcher_exe.exists():
+                launcher_exe = target_dir / "apps" / "launcher" / "NyebraltiLauncher.exe"
+
+            if launcher_exe.exists():
+                subprocess.Popen([str(launcher_exe)])
+            else:
+                launcher_script = target_dir / "apps" / "launcher" / "main.py"
+                if launcher_script.exists():
+                    subprocess.Popen([sys.executable, str(launcher_script)])
         return True

@@ -225,24 +225,51 @@ class HubWindow(QMainWindow):
             self.activity_list.addItem(QListWidgetItem("Henüz işlem kaydı bulunmuyor."))
 
     def launch_app(self, app_id: str, file_arg: str = None):
-        """Ofis uygulamasını bağımsız bir alt süreç (subprocess) olarak başlatır."""
+        """Ofis uygulamasını bağımsız bir alt süreç (subprocess) olarak başlatır (exe veya python)."""
+        exe_names = {
+            "word": "NyebraltiWord.exe",
+            "excel": "NyebraltiExcel.exe",
+            "paint": "NyebraltiPaint.exe",
+        }
         script_map = {
             "word": root_dir / "apps" / "word" / "main.py",
             "excel": root_dir / "apps" / "excel" / "main.py",
             "paint": root_dir / "apps" / "paint" / "main.py",
         }
-        target_script = script_map.get(app_id)
-        if not target_script or not target_script.exists():
-            QMessageBox.critical(self, "Hata", f"Uygulama scripti bulunamadı:\n{target_script}")
+
+        # 1. Önce exe olup olmadığını kontrol et (kurulu dizin, yerel klasör veya apps altı)
+        exe_name = exe_names.get(app_id)
+        current_dir = Path(__file__).resolve().parent
+        possible_exe_paths = [
+            current_dir / exe_name,
+            current_dir.parent / app_id / exe_name,
+            root_dir / "apps" / app_id / exe_name,
+            root_dir / exe_name,
+            Path(sys.executable).parent / exe_name
+        ]
+
+        target_cmd = None
+        for p in possible_exe_paths:
+            if p.exists():
+                target_cmd = [str(p)]
+                break
+
+        # 2. Exe bulunamadıysa Python scripti üzerinden başlat
+        if not target_cmd:
+            target_script = script_map.get(app_id)
+            if target_script and target_script.exists():
+                target_cmd = [sys.executable, str(target_script)]
+
+        if not target_cmd:
+            QMessageBox.critical(self, "Hata", f"'{app_id}' uygulaması bulunamadı.")
             return
 
-        cmd = [sys.executable, str(target_script)]
         if file_arg:
-            cmd.append(file_arg)
+            target_cmd.append(file_arg)
 
         try:
-            subprocess.Popen(cmd)
-            self.db.log_activity("launcher", "launch", f"{app_id} başlatıldı. Dosya: {file_arg or 'Yok'}")
+            subprocess.Popen(target_cmd)
+            self.db.log_activity("launcher", "launch", f"{app_id} başlatıldı. Komut: {target_cmd[0]}")
         except Exception as e:
             QMessageBox.critical(self, "Hata", f"Uygulama başlatılamadı:\n{e}")
 
